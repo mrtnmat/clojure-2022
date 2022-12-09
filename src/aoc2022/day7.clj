@@ -65,3 +65,14 @@
        (map second)
        (filter (partial > 100000))
        (reduce +)))
+
+(def total-space 70000000)
+(def space-required 30000000)
+
+(defn solve2
+  []
+  (let [sorted-dirs (->> (all-dirs-size)
+                         (sort #(< (second %1) (second %2))))]
+    (->> sorted-dirs
+         (drop-while #(> (- (second (last sorted-dirs)) (- total-space space-required)) (second %)))
+         (first))))
