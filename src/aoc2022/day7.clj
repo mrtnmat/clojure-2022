@@ -1,22 +1,6 @@
 (ns aoc2022.day7
   (:require [aoc2022.core]))
 
-(defn dir-size
-  [dir]
-  (->> (tree-seq map? vals dir)
-       (remove map?)
-       (reduce +)
-       ))
-
-(defn find-dirs
-  [state]
-  (let [a (tree-seq map? #(interleave (keys %) (vals %)) (state :dir-tree))]
-    (->> (map vector
-              (take-nth 2 (drop 1 a))
-              (take-nth 2 (drop 2 a)))
-         (filter #(map? (second %)))
-         )))
-
 (defn cd
   ([dir-name]
    (cd dir-name {:current-dir (list) :dir-tree {:/ {}}}))
@@ -38,6 +22,23 @@
   (update-in state
              (cons :dir-tree (reverse (state :current-dir)))
              #(assoc % (keyword file-name) size)))
+
+
+(defn dir-size
+  [dir]
+  (->> (tree-seq map? vals dir)
+       (remove map?)
+       (reduce +)
+       ))
+
+(defn find-dirs
+  [state]
+  (let [a (tree-seq map? #(interleave (keys %) (vals %)) (state :dir-tree))]
+    (->> (map vector
+              (take-nth 2 (drop 1 a))
+              (take-nth 2 (drop 2 a)))
+         (filter #(map? (second %)))
+         )))
 
 (defn parse-line
   [state line]
@@ -74,5 +75,7 @@
   (let [sorted-dirs (->> (all-dirs-size)
                          (sort #(< (second %1) (second %2))))]
     (->> sorted-dirs
-         (drop-while #(> (- (second (last sorted-dirs)) (- total-space space-required)) (second %)))
+         (drop-while #(> (- (second (last sorted-dirs))
+                            (- total-space space-required))
+                         (second %)))
          (first))))
