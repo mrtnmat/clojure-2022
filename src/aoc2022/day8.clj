@@ -82,10 +82,16 @@
 
 (defn all-scenic-scores
   []
-  (map #(map * %1 %2)
+  (map (partial map *)
        (->> (a)
             (map scenic-line))
        (->> (a)
             (transpose-matrix)
             (map scenic-line)
             (transpose-matrix))))
+
+(defn solve2
+  []
+  (->> (all-scenic-scores)
+       (map (partial reduce max))
+       (reduce max)))
