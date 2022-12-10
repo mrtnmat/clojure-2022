@@ -78,7 +78,8 @@
 
 (defn scenic-line
   [line]
-  (map scenic-from-both (repeat (count line) line) (range 0 (count line))))
+  (map (partial scenic-from-both line)
+       (range 0 (count line))))
 
 (defn all-scenic-scores
   []
